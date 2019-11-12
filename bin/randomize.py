@@ -1,6 +1,11 @@
-# https://stackoverflow.com/questions/886237/how-can-i-randomize-the-lines-in-a-file-using-standard-tools-on-red-hat-linux
 import random
+import sys
 
-with open('../data/rockyou-full.txt', 'r') as f:
+if len(sys.argv) == 2:
+    dataset = sys.argv[1]
+else:
+    dataset = 'rockyou'
+
+with open('data/'+dataset+'-full.txt', 'r') as f:
     lines = f.readlines()
     random.shuffle(lines)

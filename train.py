@@ -14,6 +14,8 @@ import tflib.ops.conv1d
 import tflib.plot
 import models
 
+# xrange = range
+
 def parse_args():
     parser = argparse.ArgumentParser()
 
@@ -29,7 +31,7 @@ def parse_args():
 
     parser.add_argument('--save-every', '-s',
                         type=int,
-                        default=5000,
+                        default=1000,
                         dest='save_every',
                         help='Save model checkpoints after this many iterations (default: 5000)')
 
@@ -141,12 +143,18 @@ def inf_train_gen():
 true_char_ngram_lms = [utils.NgramLanguageModel(i+1, lines[10*args.batch_size:], tokenize=False) for i in xrange(4)]
 validation_char_ngram_lms = [utils.NgramLanguageModel(i+1, lines[:10*args.batch_size], tokenize=False) for i in xrange(4)]
 for i in xrange(4):
-    print "validation set JSD for n={}: {}".format(i+1, true_char_ngram_lms[i].js_with(validation_char_ngram_lms[i]))
+    print("validation set JSD for n={}: {}".format(i+1, true_char_ngram_lms[i].js_with(validation_char_ngram_lms[i])))
 true_char_ngram_lms = [utils.NgramLanguageModel(i+1, lines, tokenize=False) for i in xrange(4)]
 
 with tf.Session() as session:
 
-    session.run(tf.global_variables_initializer())
+    # session.run(tf.global_variables_initializer())
+
+    saver = tf.train.Saver()
+    saver.restore(session, tf.train.latest_checkpoint('./output/vn/checkpoints')) # search for checkpoint file
+
+    graph = tf.get_default_graph()
+
 
     def generate_samples():
         samples = session.run(fake_inputs)

@@ -1,11 +1,17 @@
 import sys
 import random
 
+
+if len(sys.argv) == 2:
+    dataset = sys.argv[1]
+else:
+    dataset = 'rockyou'
+
 random.seed(1337)
 
 # run "python make-rockyou-full.py > data/rockyou-full.txt" to create this file
 # if it doesn't already exist
-with open('../data/rockyou-full.txt', 'r') as f:
+with open('data/'+dataset+'-full.txt', 'r') as f:
 
     # we can't line buffer because we need everything to randomize
     lines = f.readlines()
@@ -20,10 +26,10 @@ with open('../data/rockyou-full.txt', 'r') as f:
 
     split = int(len(lines) * 0.80)
 
-    with open('../data/train.txt', 'w') as f:
-        print('[info] saving 80% ({}) of dataset for training in ../data/train.txt'.format(split))
+    with open('data/'+dataset+'_train.txt', 'w') as f:
+        print('[info] saving 80% ({}) of dataset for training in data/'+dataset+'_train.txt'.format(split))
         f.write(''.join(lines[0:split]))
 
-    with open('../data/test.txt', 'w') as f:
-        print('[info] saving 20% ({}) of dataset for testing in ../data/test.txt'.format(len(lines) - split))
+    with open('data/'+dataset+'_test.txt', 'w') as f:
+        print('[info] saving 20% ({}) of dataset for testing in data/'+dataset+'_test.txt'.format(len(lines) - split))
         f.write(''.join(lines[split:]))
